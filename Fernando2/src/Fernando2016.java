@@ -19,16 +19,22 @@ public class Fernando2016 {
 		XSSFWorkbook book = null;
 		FileOutputStream fos = null;
 		try {
-			File excel = new File ("D:/Downloads/TRABAJO (1).xlsx");
+			File excel = new File ("D:/Downloads/TRABAJO.xlsx");
 			int header_col= 3; // la D
 			int data_col=6; //G
 			int last_row=43;
 			
+			int bloque=1;
+			
+			String registros="REGISTROS("+bloque+")";
+			String resultado="RESULTADO("+bloque+")";
+			
 			fis = new FileInputStream(excel); 
 			book = new XSSFWorkbook(fis); 
-			XSSFSheet sheet = book.getSheetAt(0); 
+			
+			XSSFSheet sheet = book.getSheet(registros); 
 
-			XSSFSheet sheet2 = getOrCreateSheet(book, "RESULTADO");
+			XSSFSheet sheet2 = getOrCreateSheet(book, resultado);
 			int row2count=0;
 			XSSFRow row2=getOrCreateRow(sheet2,row2count++);
 
@@ -43,11 +49,13 @@ public class Fernando2016 {
 				if (i==16 || i==17 || i==23 ||i==30 || i==33 || i==36 || i==39) continue;
 				System.out.println("Siguente concepto:" +i);
 				String header=null;
+				Double dd = 0.0;
 				if (i<16) {
 					header=sheet.getRow(i).getCell(header_col).getStringCellValue();
 					cell2=getOrCreateCell(row2, j++);
 					cell2.setCellValue(header);
-				} else {
+				}
+				else {
 					conceptos[k]=sheet.getRow(i).getCell(header_col-1).getStringCellValue();
 					conceptos2[k++]=sheet.getRow(i).getCell(header_col).getStringCellValue();
 				}
@@ -96,8 +104,14 @@ public class Fernando2016 {
 					//escribimos los campos a repetir, por cada puntuacion obtenida
 					for (int a=0;a<report_points.length; a++) {
 						row2=getOrCreateRow(sheet2, row2count++);
+						double dd=-666.0;
 						for (int b=0;b<report_data.length;b++) {
-							getOrCreateCell(row2, b).setCellValue(report_data[b]);
+							try {
+								dd = Double.parseDouble(report_data[b]);
+								getOrCreateCell(row2, b).setCellValue(dd);
+							} catch (NumberFormatException e) {
+								getOrCreateCell(row2, b).setCellValue(report_data[b]);
+							}
 						}
 						getOrCreateCell(row2, report_data.length).setCellValue(conceptos[a]);
 						getOrCreateCell(row2, report_data.length+1).setCellValue(conceptos2[a]);
