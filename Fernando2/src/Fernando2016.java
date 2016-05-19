@@ -19,12 +19,12 @@ public class Fernando2016 {
 		XSSFWorkbook book = null;
 		FileOutputStream fos = null;
 		try {
-			File excel = new File ("D:/Downloads/TRABAJO.xlsx");
+			File excel = new File ("D:/Downloads/TRABAJO (FINAL).xlsx");
 			int header_col= 3; // la D
 			int data_col=6; //G
 			int last_row=43;
 			
-			int bloque=1;
+			int bloque=2;
 			
 			String registros="REGISTROS("+bloque+")";
 			String resultado="RESULTADO("+bloque+")";
@@ -41,8 +41,8 @@ public class Fernando2016 {
 			XSSFCell cell2=null;
 			
 			//copiamos los conceptos como cabecera
-			String[] conceptos=new String[last_row-23];
-			String[] conceptos2=new String[last_row-23];
+			String[] conceptos=new String[last_row-19];
+			String[] conceptos2=new String[last_row-19];
 			int j=0;
 			int k=0;
 			for (int i=2; i<last_row ;i++){
@@ -50,7 +50,7 @@ public class Fernando2016 {
 				System.out.println("Siguente concepto:" +i);
 				String header=null;
 				Double dd = 0.0;
-				if (i<16) {
+				if (i<12) {
 					header=sheet.getRow(i).getCell(header_col).getStringCellValue();
 					cell2=getOrCreateCell(row2, j++);
 					cell2.setCellValue(header);
@@ -76,13 +76,13 @@ public class Fernando2016 {
 			
 			//copiamos los datos de los informes periciales
 			k=data_col;
-			String[] report_data= new String[14];
-			Double[] report_points= new Double[last_row-23];
+			String[] report_data= new String[10];
+			Double[] report_points= new Double[last_row-19];
 			
 			while (sheet.getRow(2).getCell(k) != null) {
 				j=0;
 				try {
-					for (int i=2; i<16 ;i++){
+					for (int i=2; i<12 ;i++){
 						//guardarmos los campos a repetir
 	
 						switch (sheet.getRow(i).getCell(k).getCellType()) { 
@@ -94,7 +94,7 @@ public class Fernando2016 {
 					System.out.println(Arrays.asList(report_data));
 	
 					j=0;
-					for (int i=17; i<last_row ;i++){
+					for (int i=12; i<last_row ;i++){
 						//y guardamos las puntuaciones
 						if (i==16 || i==17 || i==23 ||i==30 || i==33 || i==36 || i==39) continue;
 						report_points[j++]=sheet.getRow(i).getCell(k).getNumericCellValue();
