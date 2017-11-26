@@ -19,18 +19,24 @@ public class Fernando2016 {
 		XSSFWorkbook book = null;
 		FileOutputStream fos = null;
 		try {
-			File excel = new File ("D:/Downloads/TRABAJO (FINAL).xlsx");
+			File excel = new File ("C:\\Users\\Tschuss\\Dropbox\\Camera Uploads\\Libro2.xlsx");
 			int header_col= 3; // la D
-			int data_col=6; //G
-			int last_row=43;
+			int data_col=5; //F
+			int init_row=2;
+			int last_row=39;
+			String skeep_rows=",12,13,19,26,29,32,35,40,"; //empeiza y termina con comas, las filas de excel -1
 			
 			int bloque=2;
-			
+			 	
 			String registros="REGISTROS("+bloque+")";
 			String resultado="RESULTADO("+bloque+")";
 			
+			System.out.println("antes de abrir el excel...");
+
 			fis = new FileInputStream(excel); 
 			book = new XSSFWorkbook(fis); 
+			
+			System.out.println("ya tengo el excel...");
 			
 			XSSFSheet sheet = book.getSheet(registros); 
 
@@ -45,11 +51,11 @@ public class Fernando2016 {
 			String[] conceptos2=new String[last_row-19];
 			int j=0;
 			int k=0;
-			for (int i=2; i<last_row ;i++){
-				if (i==16 || i==17 || i==23 ||i==30 || i==33 || i==36 || i==39) continue;
+			for (int i=init_row; i<last_row ;i++){
+				if (skeep_rows.indexOf(","+i+",")!=-1) continue; //-1 es que no la encuentra
 				System.out.println("Siguente concepto:" +i);
 				String header=null;
-				Double dd = 0.0;
+			//	Double dd = 0.0;
 				if (i<12) {
 					header=sheet.getRow(i).getCell(header_col).getStringCellValue();
 					cell2=getOrCreateCell(row2, j++);
@@ -79,16 +85,24 @@ public class Fernando2016 {
 			String[] report_data= new String[10];
 			Double[] report_points= new Double[last_row-19];
 			
-			while (sheet.getRow(2).getCell(k) != null) {
+			while (sheet.getRow(1).getCell(k) != null) {
 				j=0;
 				try {
 					for (int i=2; i<12 ;i++){
 						//guardarmos los campos a repetir
 	
-						switch (sheet.getRow(i).getCell(k).getCellType()) { 
-						case Cell.CELL_TYPE_STRING: report_data[j++]=sheet.getRow(i).getCell(k).getStringCellValue(); break;
-						case Cell.CELL_TYPE_NUMERIC: report_data[j++]=""+Math.round(sheet.getRow(i).getCell(k).getNumericCellValue()); break;
-						default: 
+						
+						if (sheet.getRow(i).getCell(k)!=null) {
+							int cType=sheet.getRow(i).getCell(k).getCellType();
+						
+							switch (cType) { 
+								case Cell.CELL_TYPE_STRING: report_data[j++]=sheet.getRow(i).getCell(k).getStringCellValue(); break;
+								case Cell.CELL_TYPE_NUMERIC: report_data[j++]=""+Math.round(sheet.getRow(i).getCell(k).getNumericCellValue()); break;
+								default: 
+							}
+
+						} else {
+							report_data[j++]="";
 						}
 					}
 					System.out.println(Arrays.asList(report_data));
@@ -96,8 +110,12 @@ public class Fernando2016 {
 					j=0;
 					for (int i=12; i<last_row ;i++){
 						//y guardamos las puntuaciones
-						if (i==16 || i==17 || i==23 ||i==30 || i==33 || i==36 || i==39) continue;
-						report_points[j++]=sheet.getRow(i).getCell(k).getNumericCellValue();
+						if (skeep_rows.indexOf(","+i+",")!=-1) continue;
+						if (sheet.getRow(i).getCell(k)!=null) {
+							report_points[j++]=sheet.getRow(i).getCell(k).getNumericCellValue();
+						} else {
+							report_points[j++]=2.0;
+						}
 					}
 					System.out.println(Arrays.asList(report_points));
 					
@@ -119,7 +137,7 @@ public class Fernando2016 {
 						
 					}
 				} catch (IllegalStateException e) {
-					System.err.println(e);
+					e.printStackTrace();
 				}
 				k++;
 			}			
