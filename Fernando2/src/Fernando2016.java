@@ -19,7 +19,7 @@ public class Fernando2016 {
 		XSSFWorkbook book = null;
 		FileOutputStream fos = null;
 		try {
-			File excel = new File ("C:\\Users\\Tschuss\\Dropbox\\Camera Uploads\\Libro2.xlsx");
+			File excel = new File ("D:\\DOWNLOAD\\copia NOV 2017.xlsx");
 			int header_col= 3; // la D
 			int data_col=5; //F
 			int init_row=2;
